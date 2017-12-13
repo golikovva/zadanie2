@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct list_element {
+    int a;
+    int b;
+    struct list_element* prev;
+    struct list_element* next;
+}list_element;
+
+list_element*  list_new()
+{
+    list_element* pstr = malloc(sizeof(list_element*));
+    pstr->next = NULL;
+    pstr->prev = NULL;
+    return pstr;
+}
+
+int list_delete(list_element* l)
+{
+    list_element* el;
+    el = l;
+    while (el->next != NULL)
+        el = el->next;
+    while(el->prev != NULL)
+    {
+        el = el->prev;
+        free(el->next);
+    }
+    free(l);
+    return 1;
+}
+
+int push(list_element* l, list_element a)
+{
+    list_element* el;
+    el = l;
+    while(el->next != NULL)
+        el = el->next;
+    el->next = &a;
+    a.prev = el;
+    return 1;
+}
+
+int pop(list_element* l, list_element* x)
+{
+    list_element* el;
+    el = l;
+    while(el->next != NULL)
+        el = el->next;
+    el->prev = NULL;
+    *x = *el;
+    free(l);
+    return 1;
+}
+
+int unshift(list_element* l, list_element a)
+{
+    list_element* el, *el2;
+    el = l;
+    el2 = l;
+    if (el->next != NULL)
+    {
+        el2 = el2->next;
+        el->next = &a;
+        el2->prev = &a;
+        a.next = el2;
+        a.prev = el;
+        return 1;
+    }
+    else
+    {
+        el->next = &a;
+        a.prev = el;
+        return 1;
+    }
+}
+
+int shift(list_element* l, list_element* x)
+{
+    list_element* el, *el2, *el3;
+    el = l;
+    el2 = l;
+    el3 = l;
+    if (el->next != NULL)
+    {
+        el = el->next;
+        if (el->next != NULL)
+        {
+            el2 = el->next;
+            el2->prev = el3;
+            el3->next = el2;
+        }
+        else
+        {
+            el3->next = NULL;
+        }
+        el->prev = NULL;
+        el->next = NULL;
+        *x = *el;
+        free(l);
+        return 1;
+    }
+    else
+        return 0;
+}
+
+int reverse(list_element* l)
+{
+    list_element* el, *adr;
+    el = l;
+    if (el->next != NULL)
+    {
+        el = el->next;
+        el->prev = NULL;
+    while (el->next != NULL)
+        el = el->next;
+    el->next = l;
+    while(el->prev != NULL)
+    {
+        adr = el->prev;
+        el->prev = el->next;
+        el->next = adr;
+        el = el->next;
+    }
+    return 1;
+    }
+    else
+        return 0;
+}
+
+int main()
+{
+    return 0;
+}
