@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct list_element {
+    char* name;
+    char* number;
+    struct list_element* next;
+    struct list_element* prev;
+} list_element;
+
+list_element* create_list_element(char* name, char* number)
+{
+    list_element* pstr = malloc(sizeof(list_element));
+    pstr->name = name;
+    pstr->number = number;
+    pstr->next = NULL;
+    pstr->prev = NULL;
+    return pstr;
+}
+
+void insert(char* name, char* number, list_element* a)
+{
+    list_element* el = a;
+    int f = 1;
+    while (el->next != NULL)
+    {
+        el = el->next;
+        if (strcmp(el->name, name) == 0)
+        {
+            printf("Changed. Old value = %s\n", el->number);
+            el->number = number;
+            f = 0;
+        }
+    }
+    if (f == 1)
+    {
+        list_element* c = create_list_element(name, number);
+        c->prev = el;
+        el->next = c;
+        printf("OK\n");
+    }
+}
+
+void find(char* name, list_element* a)
+{
+    list_element* el = a;
+    int f = 1;
+    while(el->next != NULL)
+    {
+        el = el->next;
+        if (strcmp(el->name, name) == 0)
+        {
+            printf("%s\n", el->number);
+            f = 0;
+        }
+    }
+    if (f == 1)
+    {
+        printf("NO\n");
+    }
+}
+
+int main()
+{
+    char s[] = "0000";
+    char n[] = "655454";
+    char command[8];
+    char IN[] = "INSERT";
+    char FI[] = "FIND";
+    char name[20];
+    char number[15];
+    list_element* man0 = create_list_element(s, n);
+    while( scanf("%s", command) != EOF)
+    {
+        if (strcmp(command, IN) == 0)
+        {
+            scanf("%s", name);
+            scanf("%s", number);
+            insert(name, number, man0);
+        }
+        if(strcmp(command, FI) == 0)
+        {
+            scanf("%s", name);
+            find(name, man0);
+        }
+    }
+    return 0;
+}
